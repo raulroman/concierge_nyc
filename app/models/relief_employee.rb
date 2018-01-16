@@ -1,0 +1,3 @@
+class ReliefEmployee < ApplicationRecord
+  
+end

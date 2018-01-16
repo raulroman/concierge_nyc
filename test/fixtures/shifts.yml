@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  full_time_employee_id: 1
+  day_of_the_week: MyString
+  date: MyString
+  start_time: MyString
+  end_time: MyString
+  position: MyString
+  building_id: 1
+  approved_denied: false
+  private_listing: false
+  public_listing: false
+  claimed_by_employee_id: 1
+  relief_type: MyString
+
+two:
+  full_time_employee_id: 1
+  day_of_the_week: MyString
+  date: MyString
+  start_time: MyString
+  end_time: MyString
+  position: MyString
+  building_id: 1
+  approved_denied: false
+  private_listing: false
+  public_listing: false
+  claimed_by_employee_id: 1
+  relief_type: MyString
