@@ -1,11 +1,12 @@
 class V1::ShiftsController < ApplicationController
-  before_action :authenticate_admin, only: [:show]
-  before_action :authenticate_user
+  # before_action :authenticate_admin
+  # before_action :view_shift_request, only: [:index]
 
   def index
     shifts = Shift.all
     render json: shifts.as_json
   end
+  
   def show
     shift = Shift.find_by(id: params[:id])
     render json: shift.as_json
@@ -21,8 +22,7 @@ class V1::ShiftsController < ApplicationController
     position: params[:position],
     building_id: params[:building_id],
     approved_denied: params[:approved_denied],
-    private_listing: params[:private_listing],
-    public_listing: params[:public_listing],
+    approved_at: params[:approved_at],
     claimed_by_employee_id: params[:claimed_by_employee_id],
     relief_type: params[:relief_type]
     )
@@ -45,10 +45,14 @@ class V1::ShiftsController < ApplicationController
     position: params[:position],
     building_id: params[:building_id],
     approved_denied: params[:approved_denied],
-    private_listing: params[:private_listing],
-    public_listing: params[:public_listing],
+    approved_at: params[:approved_at],
     claimed_by_employee_id: params[:claimed_by_employee_id],
     relief_type: params[:relief_type])
+  end
+
+  def self.make_shift_public
+
+    
   end
 
   def destroy

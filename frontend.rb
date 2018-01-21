@@ -18,7 +18,7 @@ while
   user_input = gets.chomp
   if user_input == "1" 
     response = Unirest.get("localhost:3000/v1/shifts")
-    pp response.body
+    pp response.body  
 
   elsif user_input == "2"
     p "Which ID would you like to view"
@@ -42,6 +42,7 @@ while
     the_params [:position] = gets.chomp
     p "What is your building id?"
     the_params[:building_id] = gets.chomp
+
     response = Unirest.post("localhost:3000/v1/shifts?", parameters: the_params)
     pp response.body
 
@@ -51,10 +52,25 @@ while
     input_id = gets.chomp
     response = Unirest.get("localhost:3000/v1/shifts/#{input_id}")
     pp response.body
+
+    p "What is your employee id number?"
+    the_params[:full_time_employee_id] = gets.chomp
+    p "What is the new day of the week are you taking?"
+    the_params[:day_of_the_week] = gets.chomp
+    p "What is the new date?"
+    the_params[:date] = gets.chomp
     p "What is the new start time?"
     the_params[:start_time] = gets.chomp
     p "What is the new end time?"
     the_params[:end_time] = gets.chomp
+    p "What is your position?"
+    the_params [:position] = gets.chomp
+    p "What is your building id?"
+    the_params[:building_id] = gets.chomp
+    p "Is the shift approved or denied?"
+    the_params[:approved_denied] = gets.chomp
+    p "What time is this shift approved for?"
+    the_params[:approved_at] = gets.chomp
     response = Unirest.patch("localhost:3000/v1/shifts/#{input_id}", parameters: the_params)
     pp response.body
 
@@ -100,6 +116,7 @@ while
   elsif user_input == "8"
     jwt = ""
     Unirest.clear_default_headers()
+    pp "You logged out"
     
     elsif user_input == "exit"
       break
