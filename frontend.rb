@@ -66,13 +66,63 @@ while
     p "What is your position?"
     the_params [:position] = gets.chomp
     p "What is your building id?"
-    the_params[:building_id] = gets.chomp
+    the_params[:building_id] = gets.chomp 
     p "Is the shift approved or denied?"
     the_params[:approved_denied] = gets.chomp
-    p "What time is this shift approved for?"
-    the_params[:approved_at] = gets.chomp
+    p "What is your employee id number?"
+    the_params[:claimed_by_employee_id] = gets.chomp
+    p "What type of employee are you?"
+    the_params[:relief_type]
     response = Unirest.patch("localhost:3000/v1/shifts/#{input_id}", parameters: the_params)
     pp response.body
+
+    # if current_user.admin == 3
+    #   p "What is your employee id number?"
+    #   the_params[:full_time_employee_id] = gets.chomp
+    #   p "What is the new day of the week are you taking?"
+    #   the_params[:day_of_the_week] = gets.chomp
+    #   p "What is the new date?"
+    #   the_params[:date] = gets.chomp
+    #   p "What is the new start time?"
+    #   the_params[:start_time] = gets.chomp
+    #   p "What is the new end time?"
+    #   the_params[:end_time] = gets.chomp
+    #   p "What is your position?"
+    #   the_params [:position] = gets.chomp
+    #   p "What is your building id?"
+    #   the_params[:building_id] = gets.chomp
+    #   response = Unirest.patch("localhost:3000/v1/shifts/#{input_id}", parameters: the_params)
+    #   pp response.body
+
+    # elsif current_user.admin == 4
+    #   p "What is your employee id number?"
+    #   the_params[:full_time_employee_id] = gets.chomp
+    #   p "What is the new day of the week are you taking?"
+    #   the_params[:day_of_the_week] = gets.chomp
+    #   p "What is the new date?"
+    #   the_params[:date] = gets.chomp
+    #   p "What is the new start time?"
+    #   the_params[:start_time] = gets.chomp
+    #   p "What is the new end time?"
+    #   the_params[:end_time] = gets.chomp
+    #   p "What is your position?"
+    #   the_params [:position] = gets.chomp
+    #   p "What is your building id?"
+    #   the_params[:building_id] = gets.chomp 
+    #   p "Is the shift approved or denied?"
+    #   the_params[:approved_denied] = gets.chomp
+    #   response = Unirest.patch("localhost:3000/v1/shifts/#{input_id}", parameters: the_params)
+    #   pp response.body
+
+    # elsif current_user.admin == 2
+    #   p "What is your employee id number?"
+    #   the_params[:claimed_by_employee_id] = gets.chomp
+    #   p "What type of employee are you?"
+    #   the_params[:relief_type]
+    #   response = Unirest.patch("localhost:3000/v1/shifts/#{input_id}", parameters: the_params)
+    #   pp response.body
+    # end
+      
 
   elsif user_input == "5"
     p "Which shift would you like to delete?"
