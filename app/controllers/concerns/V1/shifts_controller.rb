@@ -1,6 +1,6 @@
 class V1::ShiftsController < ApplicationController
-  before_action :authenticate_admin
-  before_action :view_shift_request, only: [:index]
+  # before_action :authenticate_admin
+  # before_action :view_shift_request, only: [:index]
 
   def index
     shifts = Shift.all
