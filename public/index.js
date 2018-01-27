@@ -50,6 +50,80 @@ var SignupPage = {
   }
 };
 
+var NewShiftPage = {
+  template: "#new-shift-page",
+  data: function() {
+    return {
+      fullTimeEmployeeId: "",
+      dayOfTheWeek: "",
+      date: "",
+      startTime: "",
+      endTime: "",
+      position: "",
+      buildingId: "",
+      errors: []
+    };
+  },
+  created: function() {
+    console.log('in new shift');
+  },
+  methods: {
+    addShift: function() {
+      var params = {
+        full_time_employee_id: this.fullTimeEmployeeId,
+        day_of_the_week: this.dayOfTheWeek,
+        date: this.date,
+        start_time: this.startTime,
+        end_time: this.endTime,
+        position: this.position,
+        building_id: this.buildingId
+      };
+      axios.post("/v1/shifts/", params).then(function(response) {
+        router.push("/");
+      }).catch(function(error) {
+        this.errors = error.response.data.errors;
+      }.bind(this)
+      );
+    }
+  }
+};
+
+var EditShiftPage = {
+  template: "#edit-shfit-page",
+  data: function() {
+    return {
+      shift: {},
+      errors: []
+    };
+  },
+  methods: {
+    editShift: function() {
+      var params = {
+        full_time_employee_id: this.shift.fullTimeEmployeeId,
+        day_of_the_week: this.shift.dayOfTheWeek,
+        date: this.shift.date,
+        start_time: this.shift.startTime,
+        end_time: this.shift.endTime,
+        position: this.shift.position,
+        building_id: this.shift.buildingId
+
+      };
+      console.log(params);
+      axios.patch("/v1/shifts/" + this.$route.params.id, params).then(function(response) {
+        router.push("/");
+      }).catch(function(error) {
+        this.errors = error.response.data.errors;
+      }.bind(this));
+    }
+  },
+  created: function() {
+    console.log('running created');
+    axios.get("/v1/shifts/" + this.$route.params.id).then(function(response) {
+      this.shift = response.data;
+    }.bind(this));
+  }
+};
+
 var LoginPage = {
   template: "#login-page",
   data: function() {
@@ -97,7 +171,10 @@ var router = new VueRouter({
     { path: "/", component: HomePage },
     { path: "/signup", component: SignupPage },
     { path: "/login", component: LoginPage },
-    { path: "/logout", component: LogoutPage }
+    { path: "/logout", component: LogoutPage },
+    { path: "/shifts/new", component: NewShiftPage },
+    { path: "/shifts/:id/edit", component: EditShiftPage }
+    // { path: "/shifts/id", component: ShowShiftPage}
   ],
   scrollBehavior: function(to, from, savedPosition) {
     return { x: 0, y: 0 };
