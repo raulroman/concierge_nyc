@@ -9,6 +9,3 @@ class Shift < ApplicationRecord
   end
 end
 
-
-
-# MikeM admin 0, BrandonB admin 1, BobbyJ admin 4

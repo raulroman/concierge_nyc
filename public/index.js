@@ -1,17 +1,84 @@
 /* global Vue, VueRouter, axios */
 
+var NewShiftPage = {
+  template: "#new-shift-page",
+  data: function() {
+    return {
+      fullTimeEmployeeId: "",
+      dayOfTheWeek: "",
+      date: "",
+      startTime: "",
+      endTime: "",
+      position: "",
+      buildingId: "",
+      approvedDenied: "",
+      errors: []
+    };
+  },
+  created: function() {
+    console.log('in new shift');
+  },
+  methods: {
+    addShift: function() {
+      var params = {
+        full_time_employee_id: this.fullTimeEmployeeId,
+        day_of_the_week: this.dayOfTheWeek,
+        date: this.date,
+        start_time: this.startTime,
+        end_time: this.endTime,
+        position: this.position,
+        building_id: this.buildingId,
+        approved_denied: this.approvedDenied
+      };
+      console.log(params);
+      axios.post("/v1/shifts/", params).then(function(response) {
+        router.push("/");
+      }).catch(function(error) {
+        this.errors = error.response.data.errors;
+      }.bind(this)
+      );
+    }
+  }
+};
+
 var HomePage = {
   template: "#home-page",
   data: function() {
     return {
-      message: "Welcome to Concierge Link!",
-      shifts: []
+      shifts: [],
+      errors: []
     };
   },
   created: function() { 
     axios.get('/v1/shifts').then(function(response) {
       this.shifts = response.data;
     }.bind(this)); 
+  },
+  methods: {
+    pickUpShift: function(shift) {
+      axios.patch("/v1/shifts/" + shift.id).then(function(response) {
+        router.push("/");
+      }).catch(function(error) {
+        this.errors = error.response.data.errors;
+      }.bind(this));
+      console.log(shift);
+    },
+  },
+  computed: {}
+};
+
+var ShowShiftPage = {
+  template: "#show-shift-page",
+  data: function() {
+    return {
+      shift: {}
+    };
+  },
+  created: function() {
+    console.log('in show shift');
+    axios.get("/v1/shifts/" + this.$route.params.id).then(function(response) {
+      this.recipe = response.data;
+    }.bind(this));
   },
   methods: {},
   computed: {}
@@ -50,46 +117,8 @@ var SignupPage = {
   }
 };
 
-var NewShiftPage = {
-  template: "#new-shift-page",
-  data: function() {
-    return {
-      fullTimeEmployeeId: "",
-      dayOfTheWeek: "",
-      date: "",
-      startTime: "",
-      endTime: "",
-      position: "",
-      buildingId: "",
-      errors: []
-    };
-  },
-  created: function() {
-    console.log('in new shift');
-  },
-  methods: {
-    addShift: function() {
-      var params = {
-        full_time_employee_id: this.fullTimeEmployeeId,
-        day_of_the_week: this.dayOfTheWeek,
-        date: this.date,
-        start_time: this.startTime,
-        end_time: this.endTime,
-        position: this.position,
-        building_id: this.buildingId
-      };
-      axios.post("/v1/shifts/", params).then(function(response) {
-        router.push("/");
-      }).catch(function(error) {
-        this.errors = error.response.data.errors;
-      }.bind(this)
-      );
-    }
-  }
-};
-
 var EditShiftPage = {
-  template: "#edit-shfit-page",
+  template: "#edit-shift-page",
   data: function() {
     return {
       shift: {},
@@ -105,8 +134,9 @@ var EditShiftPage = {
         start_time: this.shift.startTime,
         end_time: this.shift.endTime,
         position: this.shift.position,
-        building_id: this.shift.buildingId
-
+        building_id: this.shift.buildingId,
+        approved_denied: this.shift.approvedDenied,
+        approved_at: this.shift.approvedAt
       };
       console.log(params);
       axios.patch("/v1/shifts/" + this.$route.params.id, params).then(function(response) {
@@ -173,8 +203,10 @@ var router = new VueRouter({
     { path: "/login", component: LoginPage },
     { path: "/logout", component: LogoutPage },
     { path: "/shifts/new", component: NewShiftPage },
+    { path: "/shifts/id", component: ShowShiftPage},
     { path: "/shifts/:id/edit", component: EditShiftPage }
-    // { path: "/shifts/id", component: ShowShiftPage}
+        
+    
   ],
   scrollBehavior: function(to, from, savedPosition) {
     return { x: 0, y: 0 };

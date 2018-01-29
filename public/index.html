@@ -38,7 +38,7 @@
     
       <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo"><b>Concierge</b>NYC</a>
+        <a href="/#/" class="logo"><b>Concierge</b>NYC</a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->
@@ -254,13 +254,13 @@
                   <!-- Menu Body -->
                   <li class="user-body">
                     <div class="col-xs-4 text-center">
-                      <a href="#">Followers</a>
+                      <a href="/#/shifts/new">New shift request</a>
                     </div>
                     <div class="col-xs-4 text-center">
-                      <a href="#">Sales</a>
+                      <a href="#">Past shift request</a>
                     </div>
                     <div class="col-xs-4 text-center">
-                      <a href="#">Friends</a>
+                      <a href="/#/shifts/:id/edit">Edit shift request</a>
                     </div>
                   </li>
                   <!-- Menu Footer-->
@@ -648,11 +648,8 @@
                 </div>
 
               </div><!-- /.row -->
-              <!-- TABLE: LATEST SHIFTS -->
-                  <!-- ********************* -->
 
               <!-- <section class="col-lg-8 connectedSortable"> -->
-
 
               <!-- </section>right col -->
             
@@ -664,7 +661,7 @@
     </div>
       <footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 2.0
+          <b>Version</b> 1.0
         </div>
         <strong>Copyright &copy; 2017-2018 <a href="https://github.com/raulroman">Roman</a>.</strong> All rights reserved.
       </footer>
@@ -730,30 +727,80 @@
                     <th>Date</th>
                     <th>Start Time</th>
                     <th>End Time</th>
+                    <th>Pick up shift</th>                
                   </tr>
                 </thead>
                 <tbody v-for="shift in shifts" v-bind:key="shift.id">
-                  <tr>
+                  <tr>                    
                     <td><a href="pages/examples/invoice.html">{{shift.building_id}}</a></td>
                     <td>{{shift.day_of_the_week}}</td>
                     <td><span class="label label-success">{{shift.position}}</span></td>
                     <td><div class="sparkbar" data-color="#00a65a" data-height="20">{{shift.date}}</div></td>
                     <td>{{shift.start_time}}</td>
                     <td>{{shift.end_time}}</td>
+                    <td> <button v-on:click="pickUpShift(shift)">Pick up shift</button></td>
                   </tr>
                 </tbody>
               </table>
             </div><!-- /.table-responsive -->
           </div><!-- /.box-body -->
-          <div class="box-footer clearfix">
-            <a href="javascript::;" class="btn btn-sm btn-info btn-flat pull-left">Pick up shift</a>
-            <a href="javascript::;" class="btn btn-sm btn-default btn-flat pull-right">View All Shifts</a>
-          </div><!-- /.box-footer -->
         </div><!-- /.box -->
       </div><!-- /.col --> 
     </div><!-- /.row -->
   </div>  
 </template>
+
+    <!-- SHOW SHIFT TO RESIDENT MANAGER -->
+    <!-- ***************************** -->
+<template id="show-shift-page">
+  <div class="vue-component">
+    <datalist id=shifts>
+      <option v-for="shift in shifts" >{{shift.name}}</option>
+    </datalist>
+    <div class="row">
+      <div class="col-md-8"> 
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title">Latest shifts</h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <div class="table-responsive">
+              <table class="table no-margin">
+                <thead>
+                  <tr>
+                    <th>Building ID</th>
+                    <th>Day of the week</th>
+                    <th>Position</th>
+                    <th>Date</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Pick up shift</th>                
+                  </tr>
+                </thead>
+                <tbody v-for="shift in shifts" v-bind:key="shift.id">
+                  <tr>                    
+                    <td><a href="pages/examples/invoice.html">{{shift.building_id}}</a></td>
+                    <td>{{shift.day_of_the_week}}</td>
+                    <td><span class="label label-success">{{shift.position}}</span></td>
+                    <td><div class="sparkbar" data-color="#00a65a" data-height="20">{{shift.date}}</div></td>
+                    <td>{{shift.start_time}}</td>
+                    <td>{{shift.end_time}}</td>
+                    <td> <button v-on:click="pickUpShift(shift)">Pick up shift</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div><!-- /.table-responsive -->
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div><!-- /.col --> 
+    </div><!-- /.row -->
+  </div>  
+</template>
+
 
   <!-- SIGN UP PAGE -->
   <!-- ************************ -->
@@ -792,7 +839,7 @@
 <template id="new-shift-page">
   <div class="vue-component">
     <div class="container">
-      <h1>Create a new shift request</h1>
+      <h1>New shift request</h1>
       <ul>
         <li class="text-danger" v-for="error in errors">{{ error }}</li>
       </ul>
@@ -826,6 +873,77 @@
       </div>
       <button class="btn btn-primary" v-on:click="addShift()">Submit shift request</button>
     </div>
+  </div>
+</template>
+
+  <!-- EDIT SHIFT PAGE -->
+  <!-- *************** -->
+<template id="edit-shift-page">
+  <div class="vue-component">
+    <div class="container">
+      <h1>Edit shift request</h1>
+      <ul>
+        <li class="text-danger" v-for="error in errors">{{ error }}</li>
+      </ul>
+      <div class="form-group">
+        <label>Employee Id Number:</label> 
+        <input type="text" class="form-control" v-model="shift.fullTimeEmployeeId">
+      </div>
+      <div class="form-group">
+        <label>Day of the week:</label> 
+        <input type="text" class="form-control" v-model="shift.dayOfTheWeek">
+      </div>
+      <div class="form-group">
+        <label>Date:</label>
+        <input type="text" class="form-control" v-model="shift.date">
+      </div>
+      <div class="form-group">
+        <label>Start Time:</label>
+        <input type="text" class="form-control" v-model="shift.startTime">
+      </div>
+      <div class="form-group">
+        <label>End Time:</label>
+        <input type="text" class="form-control" v-model="shift.endTime">
+      </div>
+      <div class="form-group">
+        <label>Position:</label>
+        <input type="text" class="form-control" v-model="shift.position">
+      </div>
+      <div class="form-group">
+        <label>Building Id Number:</label>
+        <input type="text" class="form-control" v-model="shift.buildingId">
+      </div>
+      <div class="form-group">
+        <label>Approve or Deny:</label>
+        <input type="text" class="form-control" v-model="shift.approvedDenied">
+      </div>
+      <button class="btn btn-primary" v-on:click="editShift()">Submit shift request</button>
+    </div>
+  </div>
+</template>
+
+  <!-- SHOW SHIFT PAGE -->
+  <!-- *************** -->
+<template id="show-shift-page">
+  <div class="vue-component">
+      <div class="row">
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title title">Title: {{ recipe.title }}</h5>
+                <p class="card-text ingredients"><b>ingredients</b>: {{ recipe.ingredients }}</p>
+                <p class="card-text directions"><b>directions</b>: {{ recipe.directions}}</p>
+                <p class="card-text prep-time"><b>prep time</b>: {{ recipe.prep_time}}</p>
+                <p class="card-text chef"><b>chef</b>: {{ recipe.chef }}</p>
+                <p class="card-text"><b>image</b>:
+                  <img class="image" width="200px" v-bind:src="recipe.image">
+                </p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+        <!-- make the loop in here -->
+      </div>
   </div>
 </template>
 
