@@ -700,7 +700,8 @@
   </body>
 </html>
 
-
+  <!-- HOME PAGE -->
+  <!-- ************ -->
 <template id="home-page">
   <div class="vue-component">
     <datalist id=shifts>
@@ -730,7 +731,7 @@
                     <th>Pick up shift</th>                
                   </tr>
                 </thead>
-                <tbody v-for="shift in shifts" v-bind:key="shift.id">
+                <tbody v-for="(shift, index) in shifts" v-bind:key="shift.id">
                   <tr>                    
                     <td><a href="pages/examples/invoice.html">{{shift.building_id}}</a></td>
                     <td>{{shift.day_of_the_week}}</td>
@@ -738,7 +739,7 @@
                     <td><div class="sparkbar" data-color="#00a65a" data-height="20">{{shift.date}}</div></td>
                     <td>{{shift.start_time}}</td>
                     <td>{{shift.end_time}}</td>
-                    <td> <button v-on:click="pickUpShift(shift)">Pick up shift</button></td>
+                    <td> <button v-on:click="pickUpShift(shift);removeShift()">Pick up shift</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -750,7 +751,7 @@
   </div>  
 </template>
 
-    <!-- SHOW SHIFT TO RESIDENT MANAGER -->
+    <!-- SHOW SHIFT REQUEST TO RESIDENT MANAGER -->
     <!-- ***************************** -->
 <template id="show-shift-page">
   <div class="vue-component">
@@ -778,10 +779,10 @@
                     <th>Date</th>
                     <th>Start Time</th>
                     <th>End Time</th>
-                    <th>Pick up shift</th>                
+                    <th>Approve shift request</th>                
                   </tr>
                 </thead>
-                <tbody v-for="shift in shifts" v-bind:key="shift.id">
+                <tbody v-for="(shift, index) in shifts" v-bind:key="shift.id">
                   <tr>                    
                     <td><a href="pages/examples/invoice.html">{{shift.building_id}}</a></td>
                     <td>{{shift.day_of_the_week}}</td>
@@ -789,7 +790,7 @@
                     <td><div class="sparkbar" data-color="#00a65a" data-height="20">{{shift.date}}</div></td>
                     <td>{{shift.start_time}}</td>
                     <td>{{shift.end_time}}</td>
-                    <td> <button v-on:click="pickUpShift(shift)">Pick up shift</button></td>
+                    <td> <button v-on:click="approveShift(shift); removeShift(index)">Approve shift request</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -844,10 +845,6 @@
         <li class="text-danger" v-for="error in errors">{{ error }}</li>
       </ul>
       <div class="form-group">
-        <label>Employee Id Number:</label> 
-        <input type="text" class="form-control" v-model="fullTimeEmployeeId">
-      </div>
-      <div class="form-group">
         <label>Day of the week:</label> 
         <input type="text" class="form-control" v-model="dayOfTheWeek">
       </div>
@@ -866,10 +863,6 @@
       <div class="form-group">
         <label>Position:</label>
         <input type="text" class="form-control" v-model="position">
-      </div>
-      <div class="form-group">
-        <label>Building Id Number:</label>
-        <input type="text" class="form-control" v-model="buildingId">
       </div>
       <button class="btn btn-primary" v-on:click="addShift()">Submit shift request</button>
     </div>
@@ -924,7 +917,7 @@
 
   <!-- SHOW SHIFT PAGE -->
   <!-- *************** -->
-<template id="show-shift-page">
+<!-- <template id="show-shift-page">
   <div class="vue-component">
       <div class="row">
           <div class="col-sm-6">
@@ -941,11 +934,11 @@
                 <a href="#" class="btn btn-primary">Go somewhere</a>
               </div>
             </div>
-          </div>
+          </div> -->
         <!-- make the loop in here -->
-      </div>
+     <!--  </div>
   </div>
-</template>
+</template -->
 
   <!-- LOGIN PAGE -->
   <!-- *************** -->

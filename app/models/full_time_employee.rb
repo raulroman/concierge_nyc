@@ -1,3 +1,3 @@
 class FullTimeEmployee < ApplicationRecord
-  # belongs_to :shifts
+  # belongs_to :building
 end

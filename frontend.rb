@@ -5,10 +5,10 @@ while
   system 'clear'
   p "Welcome to the Shift change page"
   p "Choose from the following options"
-  p "[1] See all available shifts"
-  p "[2] See an individual Shift"
-  p "[3] Create a shift"
-  p "[4] Update a shift"
+  p "[1] Show available shifts"
+  p "[2] Show resident manager shift requests"
+  p "[3] New shift request"
+  p "[4] Update/grab a shift"
   p "[5] Delete a shift"
   p "[6] Sign Up"
   p "[7] Login"
@@ -21,9 +21,7 @@ while
     pp response.body  
 
   elsif user_input == "2"
-    p "Which ID would you like to view"
-    input_id = gets.chomp
-    response = Unirest.get("localhost:3000/v1/shifts/#{input_id}")
+    response = Unirest.get("localhost:3000/v1/shifts/shift")
     pp response.body
 
   elsif user_input == "3"

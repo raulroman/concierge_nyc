@@ -50,7 +50,7 @@ var HomePage = {
     };
   },
   created: function() { 
-    axios.get('/v1/shifts').then(function(response) {
+    axios.get("/v1/shifts").then(function(response) {
       this.shifts = response.data;
     }.bind(this)); 
   },
@@ -63,6 +63,9 @@ var HomePage = {
       }.bind(this));
       console.log(shift);
     },
+    removeShift: function(index) {
+      this.shifts.splice(index, 1);
+    },
   },
   computed: {}
 };
@@ -71,16 +74,28 @@ var ShowShiftPage = {
   template: "#show-shift-page",
   data: function() {
     return {
-      shift: {}
+      shifts: []
     };
   },
   created: function() {
     console.log('in show shift');
-    axios.get("/v1/shifts/" + this.$route.params.id).then(function(response) {
-      this.recipe = response.data;
+    axios.get("/v1/shifts/shift").then(function(response) {
+      this.shifts = response.data;
     }.bind(this));
   },
-  methods: {},
+  methods: {
+    approveShift: function(shift) {
+      axios.patch("/v1/shifts/" + shift.id).then(function(response) {  
+        router.push("/shifts/shift");
+      }).catch(function(error) {
+        this.errors = error.response.data.errors;
+      }.bind(this));
+      console.log(shift);
+    },
+    removeShift: function(index) {
+      this.shifts.splice(index, 1);
+    }
+  },
   computed: {}
 };
 
@@ -171,6 +186,8 @@ var LoginPage = {
       axios
         .post("/user_token", params)
         .then(function(response) {
+          console.log("IM over here");
+          console.log(response);
           axios.defaults.headers.common["Authorization"] =
             "Bearer " + response.data.jwt;
           localStorage.setItem("jwt", response.data.jwt);
@@ -203,7 +220,7 @@ var router = new VueRouter({
     { path: "/login", component: LoginPage },
     { path: "/logout", component: LogoutPage },
     { path: "/shifts/new", component: NewShiftPage },
-    { path: "/shifts/id", component: ShowShiftPage},
+    { path: "/shifts/shift", component: ShowShiftPage},
     { path: "/shifts/:id/edit", component: EditShiftPage }
         
     
