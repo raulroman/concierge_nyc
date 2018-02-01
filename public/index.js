@@ -186,12 +186,16 @@ var LoginPage = {
       axios
         .post("/user_token", params)
         .then(function(response) {
-          console.log("IM over here");
           console.log(response);
           axios.defaults.headers.common["Authorization"] =
             "Bearer " + response.data.jwt;
           localStorage.setItem("jwt", response.data.jwt);
-          router.push("/");
+          if (response.data.admin === 3) {
+            router.push("/shifts/shift"); 
+          }
+          else {
+            router.push("/"); 
+          }
         })
         .catch(
           function(error) {

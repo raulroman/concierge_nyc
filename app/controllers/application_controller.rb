@@ -15,12 +15,12 @@ class ApplicationController < ActionController::API
 
   def view_shift_request
     if current_user.admin == 1
-      shifts = Shift.where(approved_denied: true).where(claimed_by_employee_id: nil ).where("approved_at < ? ", 2.minutes.ago).where("building_id <= ?", 4 )
+      shifts = Shift.where(approved_denied: true).where(claimed_by_employee_id: 0 ).where("approved_at < ? ", 2.minutes.ago).where("building_id <= ?", 4 )
 
       render json: shifts.as_json
 
     elsif current_user.admin == 2
-      shifts = Shift.where(approved_denied: true).where(claimed_by_employee_id: nil).where(building_id:current_user.building_id)
+      shifts = Shift.where(approved_denied: true).where(claimed_by_employee_id: 0).where(building_id:current_user.building_id)
       render json: shifts.as_json 
       
     elsif current_user.admin == 3

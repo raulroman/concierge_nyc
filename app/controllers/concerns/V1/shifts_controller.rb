@@ -23,7 +23,7 @@ class V1::ShiftsController < ApplicationController
       position: params[:position],
       building_id: current_user.building_id,
       approved_denied: params[:approved_denied],
-      claimed_by_employee_id: params[:claimed_by_employee_id],
+      claimed_by_employee_id: 0,
       relief_type: params[:relief_type]
       )
       if shift.save
