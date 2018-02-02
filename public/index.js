@@ -41,23 +41,64 @@ var NewShiftPage = {
   }
 };
 
+var LoginPage = {
+  template: "#login-page",
+  data: function() {
+    return {
+      email: "",
+      password: "",
+      errors: []
+    };
+  },
+  methods: {
+    submit: function() {
+      var params = {
+        auth: { email: this.email, password: this.password }
+      };
+      axios
+        .post("/user_token", params)
+        .then(function(response) {
+          console.log(response);
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + response.data.jwt;
+          localStorage.setItem("jwt", response.data.jwt);
+          if (response.data.admin === 3) {
+            router.push("/shifts/shift"); 
+          }
+          else {
+            router.push("/"); 
+          }
+        })
+        .catch(
+          function(error) {
+            this.errors = ["Invalid email or password."];
+            this.email = "";
+            this.password = "";
+          }.bind(this)
+        );
+    }
+  }
+};
+
 var HomePage = {
   template: "#home-page",
   data: function() {
     return {
       shifts: [],
+      users: [],
       errors: []
     };
   },
   created: function() { 
     axios.get("/v1/shifts").then(function(response) {
       this.shifts = response.data;
+      console.log(response.data);
     }.bind(this)); 
   },
+
   methods: {
     pickUpShift: function(shift) {
       axios.patch("/v1/shifts/" + shift.id).then(function(response) {
-        router.push("/");
       }).catch(function(error) {
         this.errors = error.response.data.errors;
       }.bind(this));
@@ -67,6 +108,43 @@ var HomePage = {
       this.shifts.splice(index, 1);
     },
   },
+  computed: {}
+};
+
+
+var UserPage = {
+  template: "#user-page",
+  data: function() {
+    return {
+      users: [],
+      errors: []
+    };
+  },
+  created: function() { 
+    axios.get("/v1/users").then(function(response) {
+      this.users = response.data;
+      console.log(response.data);
+    }.bind(this)); 
+  },
+  methods: {},
+  computed: {}
+};
+
+var BuildingInfoPage = {
+  template: "#building-info-page",
+  data: function() {
+    return {
+      buildings: [],
+      errors: []
+    };
+  },
+  created: function() { 
+    axios.get("/v1/buildings/info").then(function(response) {
+      this.buildings = response.data;
+      console.log(response.data);
+    }.bind(this)); 
+  },
+  methods: {},
   computed: {}
 };
 
@@ -94,7 +172,11 @@ var ShowShiftPage = {
     },
     removeShift: function(index) {
       this.shifts.splice(index, 1);
-    }
+    },
+
+    editShift: function(shift) {
+      router.push("/shifts/shift/edit");
+    },
   },
   computed: {}
 };
@@ -154,7 +236,7 @@ var EditShiftPage = {
         approved_at: this.shift.approvedAt
       };
       console.log(params);
-      axios.patch("/v1/shifts/" + this.$route.params.id, params).then(function(response) {
+      axios.patch("/v1/shifts/shift/edit", params).then(function(response) {
         router.push("/");
       }).catch(function(error) {
         this.errors = error.response.data.errors;
@@ -163,48 +245,9 @@ var EditShiftPage = {
   },
   created: function() {
     console.log('running created');
-    axios.get("/v1/shifts/" + this.$route.params.id).then(function(response) {
-      this.shift = response.data;
+    axios.get("/v1/shifts/shift/edit").then(function(response) {
+      this.shifts = response.data;
     }.bind(this));
-  }
-};
-
-var LoginPage = {
-  template: "#login-page",
-  data: function() {
-    return {
-      email: "",
-      password: "",
-      errors: []
-    };
-  },
-  methods: {
-    submit: function() {
-      var params = {
-        auth: { email: this.email, password: this.password }
-      };
-      axios
-        .post("/user_token", params)
-        .then(function(response) {
-          console.log(response);
-          axios.defaults.headers.common["Authorization"] =
-            "Bearer " + response.data.jwt;
-          localStorage.setItem("jwt", response.data.jwt);
-          if (response.data.admin === 3) {
-            router.push("/shifts/shift"); 
-          }
-          else {
-            router.push("/"); 
-          }
-        })
-        .catch(
-          function(error) {
-            this.errors = ["Invalid email or password."];
-            this.email = "";
-            this.password = "";
-          }.bind(this)
-        );
-    }
   }
 };
 
@@ -219,13 +262,15 @@ var LogoutPage = {
 
 var router = new VueRouter({
   routes: [
-    { path: "/", component: HomePage },
+    { path: "/", component:HomePage},
+    { path: "/users", component: UserPage},
     { path: "/signup", component: SignupPage },
     { path: "/login", component: LoginPage },
     { path: "/logout", component: LogoutPage },
     { path: "/shifts/new", component: NewShiftPage },
     { path: "/shifts/shift", component: ShowShiftPage},
-    { path: "/shifts/:id/edit", component: EditShiftPage }
+    { path: "/shifts/shift/edit", component: EditShiftPage },
+    { path: "/buildings/info" , component: BuildingInfoPage}  
         
     
   ],

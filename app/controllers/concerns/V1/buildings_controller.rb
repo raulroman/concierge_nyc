@@ -5,6 +5,12 @@ class V1::BuildingsController < ApplicationController
     render json: buildings.as_json
   end
 
+  def show
+    building = Building.all
+    render json: building.as_json
+    
+  end
+
   def create
     building = Building.new(
         name: params[:name],

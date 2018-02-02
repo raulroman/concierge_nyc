@@ -6,13 +6,16 @@ Rails.application.routes.draw do
     get "/shifts/new" => "shifts#new"
     post "/shifts" => "shifts#create"
     get "/shifts/shift" => "shifts#show"
-    get "/shifts/:id/edit" => "shifts#edit"
+    get "/shifts/shift/edit" => "shifts#edit"
     patch "/shifts/:id" => "shifts#update"
     delete "/shifts/:id" => "shifts#destroy"
 
+    get "/users/" => "users#index"
     post "/users" => "users#create"
 
+
     get "/buildings" => "buildings#index"
+    get "/buildings/info" => "buildings#show"
     post "/buildings" => "buildings#create"
   end
 end
