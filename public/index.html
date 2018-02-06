@@ -259,8 +259,8 @@
                     <div class="col-xs-4 text-center">
                       <a href="/#/users">Co Workers</a>
                     </div>
-                    <div class="col-xs-4 text-center">
-                      <a href="/#/shifts/:id/edit">Edit shift request</a>
+                    <div v-if="user.admin === 3" class="col-xs-4 text-center">
+                      <a href="/#/shifts/shift">Approve Shift Request</a>
                     </div>
                   </li>
                   <!-- Menu Footer-->
@@ -587,7 +587,7 @@
                     <th>Date</th>
                     <th>Start Time</th>
                     <th>End Time</th>
-                    <th>Pick up shift</th>                
+                    <th v-if="user.admin === 2">Pick up shift</th>                
                   </tr>
                 </thead>
                 <tbody v-for="(shift, index) in shifts" v-bind:key="shift.id">
@@ -598,7 +598,8 @@
                     <td><div class="sparkbar" data-color="#00a65a" data-height="20">{{shift.date}}</div></td>
                     <td>{{shift.start_time}}</td>
                     <td>{{shift.end_time}}</td>
-                    <td> <button v-on:click="pickUpShift(shift);removeShift()">Pick up shift</button></td>
+                    <td v-if="user.admin === 2"> <button v-on:click="pickUpShift(shift);removeShift()">Pick up shift</button></td>
+                    <td v-else="user.admin === 3"> <button v-on:click="approveShift(shift); hideShift(index)">Approve shift request</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -623,7 +624,7 @@
           </div><!-- /.box-header -->
           <div class="box-body no-padding">
             <ul class="users-list clearfix">
-              <li v-for="(user in users" v-bind:key="user.id">
+              <li v-for="user in users" v-bind:key="user.id">
                 <img src="dist/img/ui-sam copy.jpg" alt="User Image"/>
                 <a class="users-list-name" href="#">{{user.name}}</a>
                 <span class="users-list-date">Today</span>
@@ -660,7 +661,7 @@
           </div><!-- /.box-header -->
           <div class="box-body no-padding">
             <ul class="users-list clearfix">
-              <li v-for="(user in users" v-bind:key="user.id">
+              <li v-for="user in users" v-bind:key="user.id">
                 <img src="dist/img/ui-sam copy.jpg" alt="User Image"/>
                 <a class="users-list-name" href="#">{{user.name}}</a>
                 <span class="users-list-date">Today</span>

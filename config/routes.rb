@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'notifications/index' 
+
+
   post 'user_token' => 'user_token#create'
   namespace :v1 do 
     
@@ -12,6 +15,8 @@ Rails.application.routes.draw do
 
     get "/users/" => "users#index"
     post "/users" => "users#create"
+    get "/users/user" => "users#show"
+
 
 
     get "/buildings" => "buildings#index"

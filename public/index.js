@@ -12,6 +12,7 @@ var NewShiftPage = {
       position: "",
       buildingId: "",
       approvedDenied: "",
+      claimed_by: "",
       errors: []
     };
   },
@@ -86,6 +87,7 @@ var HomePage = {
     return {
       shifts: [],
       users: [],
+      user: {},
       errors: []
     };
   },
@@ -94,6 +96,14 @@ var HomePage = {
       this.shifts = response.data;
       console.log(response.data);
     }.bind(this)); 
+    axios.get("/v1/users").then(function(response) {
+      this.users = response.data;
+      console.log(response.data);
+    }.bind(this));
+    axios.get("/v1/users/user").then(function(response) {
+      this.user = response.data;
+      console.log(response.data);
+    }.bind(this));
   },
 
   methods: {
@@ -105,6 +115,17 @@ var HomePage = {
       console.log(shift);
     },
     removeShift: function(index) {
+      this.shifts.splice(index, 1);
+    },
+    approveShift: function(shift) {
+      axios.patch("/v1/shifts/" + shift.id).then(function(response) {  
+        router.push("/shifts/shift");
+      }).catch(function(error) {
+        this.errors = error.response.data.errors;
+      }.bind(this));
+      console.log(shift);
+    },
+    hideShift: function(index) {
       this.shifts.splice(index, 1);
     },
   },
@@ -270,7 +291,8 @@ var router = new VueRouter({
     { path: "/shifts/new", component: NewShiftPage },
     { path: "/shifts/shift", component: ShowShiftPage},
     { path: "/shifts/shift/edit", component: EditShiftPage },
-    { path: "/buildings/info" , component: BuildingInfoPage}  
+    { path: "/buildings/info" , component: BuildingInfoPage},
+    { path: "/users/user", component:HomePage}  
         
     
   ],

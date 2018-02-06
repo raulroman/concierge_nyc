@@ -8,7 +8,7 @@ class V1::ShiftsController < ApplicationController
   end
   
   def show
-    shifts = Shift.where(approved_denied:nil)
+    shifts = Shift.where(approved_denied:false)
     render json: shifts.as_json
   end
 
@@ -22,14 +22,21 @@ class V1::ShiftsController < ApplicationController
       end_time: params[:end_time],
       position: params[:position],
       building_id: current_user.building_id,
-      approved_denied: params[:approved_denied],
+      approved_denied: false,
       claimed_by_employee_id: 0,
       relief_type: params[:relief_type]
       )
       if shift.save
-        render json: shift.as_json
-      else
-        render json: { errors: shift.error_full_messages}
+        client = Twilio::REST::Client.new ENV["TWILIO_SID"], ENV["TWILIO_AUTH_TOKEN"]
+          
+        client.api.account.messages.create(
+          from: ENV["TWILIO_NUMBER"],
+          to: ENV["CELL_NUMBER"], 
+          body: "Testing!"
+        )
+      #   render json: shift.as_json
+      # else
+      #   render json: { errors: shift.error_full_messages}
       end
     end
   end
@@ -37,7 +44,13 @@ class V1::ShiftsController < ApplicationController
   def update
     shift = Shift.find_by(id: params[:id])
 
-    if current_user.admin == 1 || current_user.admin == 2
+    if current_user.admin == 1
+      shift.update(
+      claimed_by_employee_id: current_user.id,
+      relief_type: current_user.admin
+      )
+
+    elsif current_user.admin == 2
       shift.update(
       claimed_by_employee_id: current_user.id,
       relief_type: current_user.admin

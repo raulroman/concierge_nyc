@@ -20,12 +20,17 @@ class ApplicationController < ActionController::API
       render json: shifts.as_json
 
     elsif current_user.admin == 2
-      shifts = Shift.where(approved_denied: true).where(claimed_by_employee_id: 0).where(building_id:current_user.building_id)
+      shifts = Shift.where(approved_denied: true).where(claimed_by_employee_id: 0 ).where(building_id:current_user.building_id)
       render json: shifts.as_json 
       
     elsif current_user.admin == 3
-      shifts = Shift.where(approved_denied:nil).where(building_id: current_user.building_id)
+      shifts = Shift.where(approved_denied:false).where(building_id: current_user.building_id)
       render json: shifts.as_json
+
+    # elsif current_user.admin == 3
+    #   shifts = Shift.where("claimed_by_employee_id > ?", 1)
+    #   render json: shifts.as_json
+        
         
     else current_user
          render json: {}
