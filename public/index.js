@@ -4,7 +4,7 @@ var NewShiftPage = {
   template: "#new-shift-page",
   data: function() {
     return {
-      fullTimeEmployeeId: "",
+      employeeId: "",
       dayOfTheWeek: "",
       date: "",
       startTime: "",
@@ -16,13 +16,11 @@ var NewShiftPage = {
       errors: []
     };
   },
-  created: function() {
-    console.log('in new shift');
-  },
+  created: function() {},
   methods: {
     addShift: function() {
       var params = {
-        full_time_employee_id: this.fullTimeEmployeeId,
+        employee_id: this.employeeId,
         day_of_the_week: this.dayOfTheWeek,
         date: this.date,
         start_time: this.startTime,
@@ -265,7 +263,7 @@ var EditShiftPage = {
   methods: {
     editShift: function() {
       var params = {
-        full_time_employee_id: this.shift.fullTimeEmployeeId,
+        employee_id: this.shift.fullTimeEmployeeId,
         day_of_the_week: this.shift.dayOfTheWeek,
         date: this.shift.date,
         start_time: this.shift.startTime,
@@ -329,6 +327,7 @@ var app = new Vue({
     if (jwt) {
       axios.defaults.headers.common["Authorization"] = jwt;
     }
-  },
-  
+  }
 });
+
+

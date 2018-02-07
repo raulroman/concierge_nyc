@@ -15,7 +15,7 @@ class V1::ShiftsController < ApplicationController
   def create
     if current_user.admin == 2 || current_user.admin == 3
       shift = Shift.new(
-      full_time_employee_id: current_user.id,
+      employee_id: current_user.id,
       day_of_the_week: params[:day_of_the_week],
       date: params[:date],
       start_time: params[:start_time],
@@ -32,7 +32,7 @@ class V1::ShiftsController < ApplicationController
         client.api.account.messages.create(
           from: ENV["TWILIO_NUMBER"],
           to: ENV["CELL_NUMBER"], 
-          body: "Testing!"
+          body: "You have a new shift request pending."
         )
       #   render json: shift.as_json
       # else
