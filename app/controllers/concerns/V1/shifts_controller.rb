@@ -8,7 +8,7 @@ class V1::ShiftsController < ApplicationController
   end
   
   def show
-    shifts = Shift.where(approved_denied:false)
+    shifts = Shift.where(approved_denied: nil)
     render json: shifts.as_json
   end
 
@@ -22,7 +22,7 @@ class V1::ShiftsController < ApplicationController
       end_time: params[:end_time],
       position: params[:position],
       building_id: current_user.building_id,
-      approved_denied: false,
+      approved_denied: nil,
       claimed_by_employee_id: 0,
       relief_type: params[:relief_type]
       )

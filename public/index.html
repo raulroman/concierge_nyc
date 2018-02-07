@@ -239,13 +239,13 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="dist/img/ny copy.jpg" class="user-image" alt="User Image"/>
+                  <img src="dist/img/ui-sam copy.jpg" class="user-image" alt="User Image"/>
                   <span class="hidden-xs">Raul Roman</span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="dist/img/ny copy.jpg" class="img-circle" alt="User Image" />
+                    <img src="dist/img/ui-sam copy.jpg" class="img-circle" alt="User Image" />
                     <p>
                       Raul Roman - Web Developer
                       <small>Member since Nov. 2017</small>
@@ -285,7 +285,7 @@
           <!-- Sidebar user panel -->
           <div class="user-panel">
             <div class="pull-left image">
-              <img src="dist/img/ny copy.jpg" class="img-circle" alt="User Image" />
+              <img src="dist/img/ui-sam copy.jpg" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
               <p>Raul Roman</p>
@@ -314,6 +314,7 @@
                 <li><a href="/#/"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
                 <li class="active"><a href="/#/signup"><i class="fa fa-circle-o"></i> Sign Up </a></li>
                 <li class="active"><a href="/#/users"><i class="fa fa-circle-o"></i> Employees </a></li>
+                <li class="active"><a href="/#/login"><i class="fa fa-circle-o"></i> Login </a></li>
               </ul>
             </li>
             
@@ -581,6 +582,7 @@
               <table class="table no-margin">
                 <thead>
                   <tr>
+                    <th>Employee ID</th>
                     <th>Building ID</th>
                     <th>Day of the week</th>
                     <th>Position</th>
@@ -591,15 +593,17 @@
                   </tr>
                 </thead>
                 <tbody v-for="(shift, index) in shifts" v-bind:key="shift.id">
-                  <tr>                    
+                  <tr>
+                    <td><a href="/#/users/user">{{shift.employee_id}}</a></td> 
                     <td><a href="/#/buildings/info">{{shift.building_id}}</a></td>
                     <td>{{shift.day_of_the_week}}</td>
                     <td><span class="label label-success">{{shift.position}}</span></td>
                     <td><div class="sparkbar" data-color="#00a65a" data-height="20">{{shift.date}}</div></td>
                     <td>{{shift.start_time}}</td>
                     <td>{{shift.end_time}}</td>
+                    <td v-if="user.admin === 1"> <button v-on:click="pickUpShift(shift);removeShift()">Pick up shift</button></td>
                     <td v-if="user.admin === 2"> <button v-on:click="pickUpShift(shift);removeShift()">Pick up shift</button></td>
-                    <td v-else="user.admin === 3"> <button v-on:click="approveShift(shift); hideShift(index)">Approve shift request</button></td>
+                    <td v-if="user.admin === 3"> <button v-on:click="approveShift(shift); hideShift(index)">Approve shift request</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -625,7 +629,7 @@
           <div class="box-body no-padding">
             <ul class="users-list clearfix">
               <li v-for="user in users" v-bind:key="user.id">
-                <img src="dist/img/ui-sam copy.jpg" alt="User Image"/>
+                <img src="dist/img/ny copy.jpg" alt="User Image"/>
                 <a class="users-list-name" href="#">{{user.name}}</a>
                 <span class="users-list-date">Today</span>
               </li>
@@ -662,7 +666,7 @@
           <div class="box-body no-padding">
             <ul class="users-list clearfix">
               <li v-for="user in users" v-bind:key="user.id">
-                <img src="dist/img/ui-sam copy.jpg" alt="User Image"/>
+                <img src="dist/img/ny copy.jpg" alt="User Image"/>
                 <a class="users-list-name" href="#">{{user.name}}</a>
                 <span class="users-list-date">Today</span>
               </li>
@@ -749,6 +753,51 @@
   </div>  
 </template>
 
+  <!-- USER INFO!!! -->
+  <!-- ********** -->
+
+<template id="user-info-page">
+  <div class="vue-component">
+    <datalist id=users>
+      <option v-for="user in users" >{{user.name}}</option>
+    </datalist>
+    <div class="row">
+      <div class="col-md-8"> 
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title">Employee Info</h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <div class="table-responsive">
+              <table class="table no-margin">
+                <thead>
+                  <tr>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Email</th>                
+                  </tr>
+                </thead>
+                <tbody v-for="user in users" v-bind:key="user.id">
+                  <tr>                    
+                    <td><a href="/#/users/user">{{user.id}}</a></td>
+                    <td>{{user.name}}</td>
+                    <td><span class="label label-success">{{user.email}}</span></td>
+                    <!-- <td><div class="sparkbar" data-color="#00a65a" data-height="20">{{shift.date}}</div></td> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div><!-- /.table-responsive -->
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div><!-- /.col --> 
+    </div><!-- /.row -->
+  </div>  
+</template>
+
     <!-- SHOW SHIFT REQUEST TO RESIDENT MANAGER -->
     <!-- ***************************** -->
 <template id="show-shift-page">
@@ -771,6 +820,7 @@
               <table class="table no-margin">
                 <thead>
                   <tr>
+                    <th>Employee ID</th>
                     <th>Building ID</th>
                     <th>Day of the week</th>
                     <th>Position</th>
@@ -781,7 +831,8 @@
                   </tr>
                 </thead>
                 <tbody v-for="(shift, index) in shifts" v-bind:key="shift.id">
-                  <tr>                    
+                  <tr>
+                    <td><a href="/#/users/user">{{shift.employee_id}}</a></td>  
                     <td><a href="/#/buildings/info">{{shift.building_id}}</a></td>
                     <td>{{shift.day_of_the_week}}</td>
                     <td><span class="label label-success">{{shift.position}}</span></td>
@@ -958,3 +1009,4 @@
 
   </div>
 </template>
+

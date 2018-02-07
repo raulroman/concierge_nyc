@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  get 'notifications/index' 
+  get 'notifications/index'
+  # post '/sms' => 'sms#create' 
 
 
   post 'user_token' => 'user_token#create'

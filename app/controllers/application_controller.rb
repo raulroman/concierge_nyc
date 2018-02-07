@@ -24,7 +24,7 @@ class ApplicationController < ActionController::API
       render json: shifts.as_json 
       
     elsif current_user.admin == 3
-      shifts = Shift.where(approved_denied:false).where(building_id: current_user.building_id)
+      shifts = Shift.where(approved_denied: nil).where(building_id: current_user.building_id)
       render json: shifts.as_json
 
     # elsif current_user.admin == 3

@@ -138,12 +138,31 @@ var UserPage = {
   data: function() {
     return {
       users: [],
+      // user: {},
       errors: []
     };
   },
   created: function() { 
     axios.get("/v1/users").then(function(response) {
       this.users = response.data;
+      console.log(response.data);
+    }.bind(this)); 
+  },
+  methods: {},
+  computed: {}
+};
+
+var UserInfoPage = {
+  template: "#user-info-page",
+  data: function() {
+    return {
+      user: {},
+      errors: []
+    };
+  },
+  created: function() { 
+    axios.get("/v1/users/user").then(function(response) {
+      this.user = response.data;
       console.log(response.data);
     }.bind(this)); 
   },
@@ -292,7 +311,8 @@ var router = new VueRouter({
     { path: "/shifts/shift", component: ShowShiftPage},
     { path: "/shifts/shift/edit", component: EditShiftPage },
     { path: "/buildings/info" , component: BuildingInfoPage},
-    { path: "/users/user", component:HomePage}  
+    { path: "/users/user", component:HomePage},
+    { path: "/users/user", component:UserInfoPage} 
         
     
   ],
@@ -309,5 +329,6 @@ var app = new Vue({
     if (jwt) {
       axios.defaults.headers.common["Authorization"] = jwt;
     }
-  }
+  },
+  
 });
