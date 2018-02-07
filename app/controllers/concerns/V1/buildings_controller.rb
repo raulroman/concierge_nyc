@@ -1,5 +1,5 @@
 class V1::BuildingsController < ApplicationController
-
+  
   def index
     buildings = Building.all
     render json: buildings.as_json
